@@ -58,7 +58,7 @@ h1{font-size:clamp(34px,10vw,52px);line-height:1;font-weight:900;font-style:ital
 #draw{text-align:center;animation:rise .5s var(--ease) both}
 .status{font-weight:900;font-style:italic;text-transform:uppercase;font-size:20px;letter-spacing:.02em;margin-bottom:4px;min-height:27px}
 .sub{color:var(--mute);font-size:14px;margin-bottom:14px}
-#stage{position:relative;width:100%;height:min(62vh,500px);min-height:360px;border-radius:24px;overflow:hidden;background:radial-gradient(75% 55% at 50% 8%,rgba(255,244,214,.22),transparent 70%),radial-gradient(90% 45% at 50% 105%,rgba(255,122,0,.16),transparent 70%),linear-gradient(180deg,rgba(10,8,6,.6),rgba(6,5,4,.86)),url("./wood/grass_ground_diff_1k.jpg") center/cover no-repeat;border:1px solid var(--line);box-shadow:inset 0 0 50px rgba(0,0,0,.5),0 0 40px rgba(255,122,0,.07);touch-action:manipulation}
+#stage{position:relative;width:100%;height:min(62vh,500px);min-height:360px;border-radius:24px;overflow:hidden;background:radial-gradient(75% 55% at 50% 8%,rgba(255,244,214,.22),transparent 70%),radial-gradient(90% 45% at 50% 105%,rgba(255,122,0,.16),transparent 70%),linear-gradient(180deg,rgba(10,8,6,.34),rgba(6,5,4,.66)),url("./wood/grass_ground_diff_1k.jpg") center/cover no-repeat;border:1px solid var(--line);box-shadow:inset 0 0 50px rgba(0,0,0,.5),0 0 40px rgba(255,122,0,.07);touch-action:manipulation}
 #stage canvas{display:block;width:100%;height:100%}
 #stage.hover{cursor:pointer}
 #stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 45%,transparent 58%,rgba(0,0,0,.5) 100%)}
@@ -109,6 +109,31 @@ h1{font-size:clamp(34px,10vw,52px);line-height:1;font-weight:900;font-style:ital
 @keyframes shine{0%,55%{left:-60%}100%{left:130%}}
 @media (max-width:540px){#results .grid{grid-template-columns:1fr}.val{font-size:46px}.rb{width:46px;height:46px}}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}}
+/* ===== WOW-шар: сучасні ефекти інтерфейсу ===== */
+@property --a{syntax:'<angle>';inherits:false;initial-value:0deg}
+@keyframes spin{to{--a:360deg}}
+@keyframes shimmer{to{background-position:-220% 0}}
+@keyframes glow{0%,100%{box-shadow:0 12px 30px rgba(255,122,0,.32),inset 0 1px 0 rgba(255,255,255,.6)}50%{box-shadow:0 14px 46px rgba(255,122,0,.6),inset 0 1px 0 rgba(255,255,255,.6)}}
+@keyframes rip{to{transform:scale(1);opacity:0}}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:2;opacity:.08;mix-blend-mode:overlay;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.panel{position:relative}
+.panel::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;background:conic-gradient(from var(--a),transparent 0 68%,rgba(255,122,0,.95) 84%,rgba(255,214,170,.95) 92%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);mask-composite:exclude;animation:spin 7s linear infinite}
+h1{background:linear-gradient(100deg,#fff 10%,#ffb066 35%,#ff7a00 50%,#ffb066 65%,#fff 90%) 0 0/220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 6s linear infinite}
+.ring{position:absolute;left:50%;top:0;width:112px;height:112px;margin-left:-56px;border-radius:50%;pointer-events:none;background:conic-gradient(from var(--a),transparent,rgba(255,122,0,.9),transparent 60%);-webkit-mask:radial-gradient(circle,transparent 52px,#000 53px,#000 55px,transparent 56px);mask:radial-gradient(circle,transparent 52px,#000 53px,#000 55px,transparent 56px);animation:spin 5s linear infinite}
+.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.chip{font-size:12px;font-weight:700;letter-spacing:.04em;padding:7px 13px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--text)}
+.chip i{font-style:normal;color:var(--lime);margin-right:6px}
+.eyebrow{display:flex;align-items:center;gap:10px;margin:2px 2px 14px;font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--lime)}
+.eyebrow::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+.btn.main{animation:glow 2.6s ease-in-out infinite}
+.btn,.rb{position:relative;overflow:hidden}
+.rip{position:absolute;border-radius:50%;background:rgba(255,255,255,.38);transform:scale(0);animation:rip .6s ease-out forwards;pointer-events:none}
+.prog{height:6px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden;margin:-4px auto 14px;max-width:320px}
+.prog i{display:block;height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,var(--lime2),#ffb066);box-shadow:0 0 12px rgba(255,122,0,.7);transition:width .5s var(--ease)}
+.team:hover,.counter:hover{border-color:rgba(255,122,0,.55)}
+/* Спрощена шапка */
+header{padding:10px 0 18px}
+h1{font-size:clamp(30px,9vw,42px);margin:4px 0 0;letter-spacing:.04em;animation:none;background:linear-gradient(180deg,#fff 30%,#ffb066 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 14px rgba(255,122,0,.3))}
 </style>
 </head>
 <body>
@@ -124,19 +149,12 @@ h1{font-size:clamp(34px,10vw,52px);line-height:1;font-weight:900;font-style:ital
         <label class="col"><span>Музика</span><input type="range" id="sndMusic" min="0" max="100"></label>
       </div>
     </div>
-    <svg class="logo" viewBox="0 0 80 80" aria-hidden="true">
-      <circle cx="40" cy="40" r="37" fill="#1b1108" stroke="#ff7a00" stroke-width="3"/>
-      <polygon points="40,24 52,33 47,47 33,47 28,33" fill="#ff7a00"/>
-      <path d="M40 24V12M52 33l11-4M47 47l7 10M33 47l-7 10M28 33l-11-4" stroke="#ff7a00" stroke-width="3" stroke-linecap="round"/>
-      <rect x="22" y="62" width="14" height="5" rx="2.5" fill="#ff7a00"/><rect x="40" y="62" width="22" height="5" rx="2.5" fill="#f3ece2"/>
-    </svg>
-    <div class="brand">ЖЕРЕБ</div>
-    <h1>Час визначити команди</h1>
-    <p class="lead">Задайте кількість коротких і довгих паличок. Рука їх перемішає, а кожен гравець по черзі витягне свою.</p>
+    <h1>ЖЕРЕБ</h1>
   </header>
 
   <main>
     <section id="setup" class="panel" aria-label="Налаштування жеребкування">
+      <div class="eyebrow">Налаштування жеребу</div>
       <div class="counters">
         <div class="counter">
           <div class="t"><span class="stick-i s"></span>Короткі палички</div>
@@ -163,6 +181,7 @@ h1{font-size:clamp(34px,10vw,52px);line-height:1;font-weight:900;font-style:ital
     <section id="draw" class="panel hidden" aria-label="Витягування паличок">
       <div class="status" id="status" aria-live="polite"></div>
       <div class="sub" id="sub"></div>
+      <div class="prog" aria-hidden="true"><i id="progBar"></i></div>
       <div id="stage" aria-label="3D-сцена: рука з паличками"></div>
       <div id="reveal" role="status"><div class="rcard" id="rcard"><div class="rtype" id="rtype"></div><div class="rnum" id="rnum"></div><p class="rtext" id="rtext"></p><button class="btn main" id="next" style="margin-top:0"></button></div></div>
       <button class="link" id="openAll" style="margin-top:14px">Відкрити всі палички одразу</button>
@@ -389,6 +408,50 @@ var Music = (function(){
   }
   return { start: start, apply: apply };
 })();
+/* Ефекти: конфеті, лічильник, ріпл */
+var Confetti = (function(){
+  var cv, cx, parts = [], raf = 0;
+  function tick(){
+    cx.clearRect(0, 0, innerWidth, innerHeight);
+    parts = parts.filter(function(p){ return p.life > 0 && p.y < innerHeight + 20; });
+    parts.forEach(function(p){
+      p.vy += .38; p.vx *= .992; p.x += p.vx; p.y += p.vy; p.r += p.vr; p.life -= .006;
+      cx.save(); cx.globalAlpha = Math.max(0, Math.min(1, p.life*1.6)); cx.translate(p.x, p.y); cx.rotate(p.r);
+      cx.fillStyle = p.c; cx.fillRect(-p.w/2, -p.h/2, p.w, p.h); cx.restore();
+    });
+    raf = parts.length ? requestAnimationFrame(tick) : 0;
+    if (!raf) cx.clearRect(0, 0, innerWidth, innerHeight);
+  }
+  function burst(){
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!cv){
+      cv = document.createElement('canvas');
+      cv.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:25';
+      document.body.appendChild(cv); cx = cv.getContext('2d');
+    }
+    var d = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = innerWidth*d; cv.height = innerHeight*d; cx.setTransform(d, 0, 0, d, 0, 0);
+    var cols = ['#ff7a00', '#ffa042', '#f3ece2', '#ffffff', '#e65a00'];
+    for (var i = 0; i < 110; i++) parts.push({ x: innerWidth/2, y: innerHeight*.38, vx: (Math.random()-.5)*15, vy: -Math.random()*13 - 4,
+      w: 5 + Math.random()*6, h: 3 + Math.random()*4, r: Math.random()*6, vr: (Math.random()-.5)*.4, c: cols[i % 5], life: 1 });
+    if (!raf) raf = requestAnimationFrame(tick);
+  }
+  return { burst: burst };
+})();
+function countUp(el, to){
+  var t0 = performance.now(), D = 700;
+  (function step(now){
+    var k = Math.min(1, (now - t0)/D); el.textContent = Math.round(to*(1 - Math.pow(1 - k, 3)));
+    if (k < 1) requestAnimationFrame(step); else el.textContent = to;
+  })(t0);
+}
+document.addEventListener('pointerdown', function(e){
+  var b = e.target.closest && e.target.closest('.btn,.rb'); if (!b) return;
+  var r = b.getBoundingClientRect(), s = document.createElement('span'), d = Math.max(r.width, r.height)*1.6;
+  s.className = 'rip'; s.style.cssText = 'width:' + d + 'px;height:' + d + 'px;left:' + (e.clientX - r.left - d/2) + 'px;top:' + (e.clientY - r.top - d/2) + 'px';
+  b.appendChild(s); setTimeout(function(){ if (s.parentNode) s.parentNode.removeChild(s); }, 650);
+});
+
 (function(){
   var btn = $('sndBtn'), menu = $('sndMenu'), on = $('sndOn'), vm = $('sndMaster'), vs = $('sndSfx'), vmu = $('sndMusic'), c = Sound.cfg;
   function sync(){
@@ -448,7 +511,7 @@ function useSet(key, m){
 }
 function skinMat(){
   var m = new THREE.MeshPhysicalMaterial({ color: 0xd2a181, roughness: 1, emissive: 0x2a0f08, emissiveIntensity: .1, clearcoat: .06, clearcoatRoughness: .6 });
-  m.sheen = new THREE.Color(0xc8644e); m.normalScale.set(.8, .8); m.userData.tint = [1, 1, 1];
+  m.sheen = new THREE.Color(0xc8644e); m.normalScale.set(.8, .8); m.userData.tint = [.95, .87, .8];
   useSet('skin', m); return m;
 }
 function woodMat(clip){
@@ -472,9 +535,9 @@ function stickGeo(W, L){
 function addNumber(m, num, W, L){
   var P = 480, hd = .8, w = Math.max(8, Math.round(W*P)), h = Math.round(hd*P);
   var c = document.createElement('canvas'); c.width = w; c.height = h;
-  var x = c.getContext('2d'), s = String(num), f = Math.min(w*.85/(.6*s.length), 190);
+  var x = c.getContext('2d'), s = String(num), f = Math.min(w*.85/(.6*Math.max(2, s.length)), 190);
   x.font = '700 ' + f + 'px "Segoe UI",Roboto,Arial,sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
-  x.fillStyle = 'rgba(30,14,4,.93)'; x.fillText(s, w/2, .62*P);
+  x.fillStyle = 'rgba(30,14,4,.93)'; x.fillText(s, w/2, .3*P);
   var t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.anisotropy = maxAniso;
   var mat = new THREE.MeshStandardMaterial({ map: t, transparent: true, roughness: .9, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
   if (G && G.clip) mat.clippingPlanes = [G.clip];
@@ -535,7 +598,7 @@ function init3D(){
   stageEl.appendChild(r.domElement);
   var scene = new T.Scene(), cam = new T.PerspectiveCamera(32, 1, .1, 60);
   scene.add(new T.HemisphereLight(0xdfeeff, 0x4a3426, .75));
-  var key = new T.DirectionalLight(0xfff0dc, 2.2); key.position.set(3.5, 5.5, 5); key.castShadow = true;
+  var key = new T.DirectionalLight(0xfff0dc, 1.9); key.position.set(3.5, 5.5, 5); key.castShadow = true;
   key.shadow.mapSize.set(1024, 1024); key.shadow.bias = -.0005; key.shadow.normalBias = .02;
   var sc = key.shadow.camera; sc.left = sc.bottom = -4; sc.right = sc.top = 4; sc.near = .5; sc.far = 20;
   scene.add(key);
@@ -563,7 +626,7 @@ function resize(){
   if (!G) return;
   var w = stageEl.clientWidth, h = stageEl.clientHeight; if (!w || !h) return;
   G.r.setSize(w, h, false); G.cam.aspect = w / h;
-  var d = 9.8 * Math.min(1.5, Math.max(1, .8 / G.cam.aspect));
+  var d = 7.8 * Math.min(1.5, Math.max(1, .8 / G.cam.aspect));
   G.cam.position.set(0, .9, d); G.cam.lookAt(0, .9, 0); G.cam.updateProjectionMatrix();
 }
 function disp(m){
@@ -577,7 +640,7 @@ function placeSticks(){
   while (G.stickG.children.length) G.stickG.remove(G.stickG.children[0]);
   G.groups = [];
   var per = rowsOf(n).per, st0 = per > 1 ? Math.min(6.8, 80/(per-1)) : 0;
-  G.W = st0 ? Math.min(.2, st0 * Math.PI/180 * TOP * .95) : .2;
+  G.W = st0 ? Math.min(.17, st0 * Math.PI/180 * (TOP - .3) * .95) : .17;
   state.sticks.forEach(function(st, i){
     var L = st.t === 's' ? LS : LL;
     var m = new T.Mesh(stickGeo(G.W, L), G.woodC);
@@ -598,7 +661,7 @@ function layout(n){
     var row = Math.floor(i/R.per), j = i % R.per, cnt = Math.min(R.per, n - row*R.per);
     var step = cnt > 1 ? Math.min(6.8, 80/(cnt-1)) : 0;
     var a = ((cnt-1)/2 - j) * step + (row % 2 && cnt > 1 ? step/2 : 0);
-    out.push({ a: a*Math.PI/180, z: -.07*row, top: TOP + .15*row });
+    out.push({ a: a*Math.PI/180, z: -.07*row + (j % 2)*.012, top: TOP + .15*row });
   }
   return out;
 }
@@ -651,6 +714,7 @@ function loop(now){
 }
 function updateStatus(){
   var n = state.sticks.length, left = n - state.pulled;
+  $('progBar').style.width = (n ? state.pulled/n*100 : 0) + '%';
   $('status').textContent = left ? 'Витягніть паличку' : 'Усі палички витягнуто';
   $('sub').textContent = 'Залишилося ' + left + ' із ' + n + '. Довжина прихована в руці.';
 }
@@ -704,7 +768,7 @@ function pick(mesh){
     mesh.material = G.woodU; mesh.children.forEach(function(d){ d.material.clippingPlanes = null; d.material.needsUpdate = true; });
     G.stickG.remove(g);
     var p0 = mesh.position.clone(), q0 = mesh.quaternion.clone();
-    var p1 = new THREE.Vector3(0, .9, 2.0), q1 = new THREE.Quaternion().setFromEuler(new THREE.Euler(-.05, .3, 0));
+    var p1 = new THREE.Vector3(0, .9, 1.2), q1 = new THREE.Quaternion().setFromEuler(new THREE.Euler(-.05, .3, 0));
     tween(850, function(e){
       mesh.position.lerpVectors(p0, p1, e); mesh.quaternion.copy(q0).slerp(q1, e);
     }, function(){
@@ -754,11 +818,13 @@ function closeReveal(){
     box.appendChild(f);
   }
   function finish(){
+    Confetti.burst();
     var r = compute(), n = r.s.length + r.l.length;
     $('sCount').textContent = r.s.length; $('sWord').textContent = plural(r.s.length);
     $('lCount').textContent = r.l.length; $('lWord').textContent = plural(r.l.length);
     $('meta').textContent = 'Усього ' + n + ' ' + plural(n);
     document.querySelectorAll('.team').forEach(function(c){ c.style.animation = 'none'; void c.offsetWidth; c.style.animation = ''; });
+    countUp($('sCount'), r.s.length); countUp($('lCount'), r.l.length);
     fill($('sNums'), r.s, 350); fill($('lNums'), r.l, 520);
     show($('results'));
   }
